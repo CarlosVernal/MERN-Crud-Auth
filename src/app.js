@@ -2,10 +2,15 @@
 import express from "express";
 import morgan from "morgan";
 
+import authRoutes from "./routes/auth.routes.js";
 
 const app = express();
 
-//middleware 
+//middleware
 app.use(morgan("dev"));
+app.use(express.json());
+
+//rutas
+app.use("/api", authRoutes); // /api -> todas las rutas que accedan al backEnd
 
 export default app;
