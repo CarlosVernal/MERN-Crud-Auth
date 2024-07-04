@@ -14,6 +14,6 @@ const router = Router();
 router.post("/register", register);
 router.post("/login", login);
 router.post("/logout", logout);
-router.get("/profile",authRequired, profile);
+router.get("/profile",authRequired, profile); //para acceder a esta ruta debe pasar por un middleware que verifique si el usuario es valido para acceder a la ruta
 
 export default router;

@@ -68,11 +68,11 @@ export const logout = (req, res) => {
 };
 
 export const profile = async (req, res) => {
-  const userFound = await User.findById(req.user.id);
+  const userFound = await User.findById(req.user.id); //busqueda del usuario en base de datos segun id extraida del token validado
 
-  if (!userFound) return res.status(400).json({ message: "User not Found" });
+  if (!userFound) return res.status(400).json({ message: "User not Found" });//en caso de no encontrar un usuario valido
 
-  res.json({ //datos del usuario al front 
+  res.json({ //envio de datos del usuario al front 
     id: userFound._id,
     username: userFound.username,
     email: userFound.email,
