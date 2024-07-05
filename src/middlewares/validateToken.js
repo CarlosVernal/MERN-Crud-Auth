@@ -9,7 +9,7 @@ export const authRequired = (req, res, next) => {
   jwt.verify(token, TOKEN_SECRET, (err, user) => { //comprobacion, se extrae el id del token utilizando la clave secreta
     if (err) return res.status(403).json({ message: "Invalid Token" });
     
-    req.user = user;
+    req.user = user; //asigna el valor user a req.user, que puede ser utilizado por las demas rutas
     next(); //permite proceder a la ruta
   });
 };
