@@ -5,6 +5,9 @@ import { createAccessToken } from "../libs/jwt.js";
 export const register = async (req, res) => {
   const { username, email, password } = req.body;
   try {
+    const userFound = await User.findOne({ email });
+    if (userFound) return res.status(400).json(["The email already exist"]);
+
     const passwordHash = await bcryptjs.hash(password, 10); //Convertir a un string aleatorio
     const newUser = new User({
       //Crea el usuario con la contraseña enciptada
@@ -70,9 +73,10 @@ export const logout = (req, res) => {
 export const profile = async (req, res) => {
   const userFound = await User.findById(req.user.id); //busqueda del usuario en base de datos segun id extraida del token validado
 
-  if (!userFound) return res.status(400).json({ message: "User not Found" });//en caso de no encontrar un usuario valido
+  if (!userFound) return res.status(400).json({ message: "User not Found" }); //en caso de no encontrar un usuario valido
 
-  res.json({ //envio de datos del usuario al front 
+  res.json({
+    //envio de datos del usuario al front
     id: userFound._id,
     username: userFound.username,
     email: userFound.email,
