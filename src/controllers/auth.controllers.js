@@ -38,11 +38,10 @@ export const login = async (req, res) => {
 
   try {
     const userFound = await User.findOne({ email }); //encuentra un usuario en la DB con ese correo
-    if (!userFound) return res.status(400).json({ message: "User Not Found" }); //en caso de que no exista
+    if (!userFound) return res.status(400).json(["User Not Found"]); //en caso de que no exista
 
     const passMatch = await bcryptjs.compare(password, userFound.password); //Compara las contraseñas (true/flase)
-    if (!passMatch)
-      return res.status(400).json({ message: "Incorrect Password" });
+    if (!passMatch) return res.status(400).json(["Incorrect Password"]);
 
     // Tambien se podria simplemente decir credenciales no validas para brindar mas seguridad
 
@@ -73,7 +72,7 @@ export const logout = (req, res) => {
 export const profile = async (req, res) => {
   const userFound = await User.findById(req.user.id); //busqueda del usuario en base de datos segun id extraida del token validado
 
-  if (!userFound) return res.status(400).json({ message: "User not Found" }); //en caso de no encontrar un usuario valido
+  if (!userFound) return res.status(400).json(["User not Found"]); //en caso de no encontrar un usuario valido
 
   res.json({
     //envio de datos del usuario al front
