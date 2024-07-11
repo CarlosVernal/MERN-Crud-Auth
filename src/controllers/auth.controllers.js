@@ -1,6 +1,8 @@
 import User from "../models/user.model.js";
 import bcryptjs from "bcryptjs"; //Modulo para encriptar contraseñas
 import { createAccessToken } from "../libs/jwt.js";
+import jwt from "jsonwebtoken";
+import { TOKEN_SECRET } from "../config.js";
 
 export const register = async (req, res) => {
   const { username, email, password } = req.body;
@@ -81,5 +83,25 @@ export const profile = async (req, res) => {
     email: userFound.email,
     createdAt: userFound.createdAt,
     updatedAt: userFound.updatedAt,
+  });
+};
+
+//funcion solicitada desde el frontEnd para verificar cookies, si no es valida o no existe envia mensaje de error
+export const verifyToken = async (req, res) => {
+  const { token } = req.cookies; //extra el token de la cookie
+
+  if (!token) return res.status(401).json({ message: "Unauthorized" }); //no existe
+
+  jwt.verify(token, TOKEN_SECRET, async (err, user) => {
+    //si existe comprueba que sea valida
+    if (err) return res.status(401).json({ message: "Unauthorized" });
+    const userFound = await User.findById(user.id); //si existe extrae la id y la busca en la base de datos y compara
+    if (!userFound) return res.status(401).json({ message: "Unauthorized" }); // si la id extraida no corresponde a ningun usuario existente envia error
+
+    return res.json({ //si es valida envia los datos del usuario
+      id: userFound.id,
+      email: userFound.email,
+      username: userFound.username,
+    });
   });
 };

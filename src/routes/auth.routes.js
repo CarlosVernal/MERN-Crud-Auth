@@ -6,6 +6,7 @@ import {
   login,
   logout,
   profile,
+  verifyToken,
 } from "../controllers/auth.controllers.js"; //no olvidar el punto .js en mis modulos
 
 //middleware
@@ -21,4 +22,6 @@ router.post("/login", validatorSchema(loginSchema), login);
 router.post("/logout", logout);
 router.get("/profile", authRequired, profile); //para acceder a esta ruta debe pasar por un middleware que verifique si el usuario es valido para acceder a la ruta
 
+//ruta recivida desde auth.js del frontEnd (client)
+router.get("/verify", verifyToken);
 export default router;
