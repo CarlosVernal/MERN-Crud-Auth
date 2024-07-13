@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom"; //contexto-rutas-ruta especifica
+import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom"; //contexto-rutas-ruta especifica
 
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
@@ -10,6 +10,7 @@ import ProfilePage from "./pages/ProfilePage";
 
 //logica para proteger rutas privadas (/,login y register -> rutas publicas)
 import ProtectedRoutes from "./ProtectedRoutes";
+import { TaskProvider } from "./context/TasksContext";
 
 function App() {
   return (
@@ -22,9 +23,17 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
 
           <Route element={<ProtectedRoutes />}>
-            <Route path="/tasks" element={<TasksPage />} />
-            <Route path="/add-task" element={<TaskFormPage />} />
-            <Route path="/task/:id" element={<TaskFormPage />} />
+            <Route
+              element={
+                <TaskProvider>
+                  <Outlet />
+                </TaskProvider>
+              }
+            >
+              <Route path="/tasks" element={<TasksPage />} />
+              <Route path="/add-task" element={<TaskFormPage />} />
+              <Route path="/task/:id" element={<TaskFormPage />} />
+            </Route>
             <Route path="/profile" element={<ProfilePage />} />
           </Route>
         </Routes>

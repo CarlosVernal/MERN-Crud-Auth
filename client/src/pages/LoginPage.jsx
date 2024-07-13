@@ -11,11 +11,11 @@ function LoginPage() {
   } = useForm();
 
   const { signin, isAuthenticated, errors: loginErrors } = useAuth();
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   if (isAuthenticated) navigate("/tasks");
-  // }, [isAuthenticated]);
+  useEffect(() => {
+    if (isAuthenticated) navigate("/tasks");
+  }, [isAuthenticated]);
 
   const onSubmit = handleSubmit((data) => {
     signin(data);
@@ -58,7 +58,7 @@ function LoginPage() {
           </button>
         </form>
         <p className="flex justify-between mt-4 text-white">
-          Don't have an account? 
+          Don't have an account?
           <Link
             className="text-blue-500 hover:text-blue-600 transition duration-300 ease-in-out"
             to={"/register"}

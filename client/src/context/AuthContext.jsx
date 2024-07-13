@@ -54,7 +54,7 @@ export const AuthProvider = ({ children }) => {
     }
   }, [errors]);
 
-  useEffect(() => {
+  useEffect(() => { //verifica que las cookies pertenecen a un usuario valido
     async function checkLogin() { // usa esta funcion al cargar la pagina
       //recive las cookies para acceder a las rutas protegidas
       const cookies = Cookies.get(); //recive la cookie existente enviada desde el backEnd src/auth.controlleres.js register y login
