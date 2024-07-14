@@ -1,5 +1,9 @@
 import { createContext, useState, useContext, useEffect } from "react";
-import { registerRequest, loginRequest, verifyTokenRequest } from "../api/auth";
+import {
+  registerRequest,
+  loginRequest,
+  verifyTokenRequest,
+} from "../api/auth";
 import Cookies from "js-cookie"; //para lectura de cookies
 //contexto de autentificacion, un usuario autentificado podra acceder a todo lo que este dentro del contexto
 export const AuthContext = createContext();
@@ -43,6 +47,13 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const signout = async () => {
+    Cookies.remove("token")
+    setIsAuthenticated(false)
+    setUser(null)
+    setLoading(true)
+  };
+
   useEffect(() => {
     //elimina los recuadros de los errores luego de 5 segundos
     if (errors.length > 0) {
@@ -54,36 +65,41 @@ export const AuthProvider = ({ children }) => {
     }
   }, [errors]);
 
-  useEffect(() => { //verifica que las cookies pertenecen a un usuario valido
-    async function checkLogin() { // usa esta funcion al cargar la pagina
+  useEffect(() => {
+    //verifica que las cookies pertenecen a un usuario valido
+    async function checkLogin() {
+      // usa esta funcion al cargar la pagina
       //recive las cookies para acceder a las rutas protegidas
       const cookies = Cookies.get(); //recive la cookie existente enviada desde el backEnd src/auth.controlleres.js register y login
       //console.log(cookies);
-      if (!cookies.token) { // si no hay cookie el usuario no esta autenticado, por lo tanto no hay user
+      if (!cookies.token) {
+        // si no hay cookie el usuario no esta autenticado, por lo tanto no hay user
         setIsAuthenticated(false);
         setLoading(false);
         return setUser(null);
       }
       //console.log(cookies.token);
-      try { //intenta enviar el token al backEnd para revisar si es valido
+      try {
+        //intenta enviar el token al backEnd para revisar si es valido
         const res = await verifyTokenRequest(cookies.token); //funcion asincrona que pregunta al backEnd en auth.js
         //console.log(res);
-        if (!res.data) { //si no existen datos (.data)
+        if (!res.data) {
+          //si no existen datos (.data)
           setIsAuthenticated(false);
           setLoading(false);
-          setUser(null)
+          setUser(null);
           return;
         }
 
-        // si existen datos, entonces el usuario es valido 
+        // si existen datos, entonces el usuario es valido
         setIsAuthenticated(true);
         setUser(res.data);
         setLoading(false); //termino de "cargar"
-
-      } catch (error) { //si hay algun error el usuario no es valido
+      } catch (error) {
+        //si hay algun error el usuario no es valido
         //console.log(error);
         setIsAuthenticated(false);
-        setLoading(false)
+        setLoading(false);
         setUser(null);
       }
     }
@@ -95,6 +111,7 @@ export const AuthProvider = ({ children }) => {
       value={{
         signup,
         signin,
+        signout,
         loading,
         user,
         isAuthenticated,

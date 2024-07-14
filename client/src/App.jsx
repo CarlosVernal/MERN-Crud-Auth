@@ -7,6 +7,7 @@ import TasksPage from "./pages/TasksPage";
 import HomePage from "./pages/HomePage";
 import TaskFormPage from "./pages/TaskFormPage";
 import ProfilePage from "./pages/ProfilePage";
+import Navbar from './components/Navbar'
 
 //logica para proteger rutas privadas (/,login y register -> rutas publicas)
 import ProtectedRoutes from "./ProtectedRoutes";
@@ -17,6 +18,7 @@ function App() {
     //Contexto de la app
     <AuthProvider>
       <BrowserRouter>
+      <Navbar />
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
