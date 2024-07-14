@@ -1,24 +1,21 @@
 import { useEffect } from "react";
-import { UseTask } from "../context/TasksContext";
+import { useTask } from "../context/TasksContext";
+import TaskCard from "../components/TaskCard";
 
 function TasksPage() {
-  const { getTasks, tasks } = UseTask();
+  const { getTasks, tasks } = useTask();
   useEffect(() => {
     getTasks();
   }, []);
 
-if(tasks.length === 0) return (<h1>No Tasks</h1>);
+  if (tasks.length === 0) return <h1>No Tasks</h1>;
 
   return (
-    <div>
+    <div className="p-4 grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
       {tasks.map((task) => (
-        <div key={task._id}>
-          <h1>{task.title}</h1>
-          <p>{task.description} </p>
-        </div>
+        <TaskCard task={task} key={task._id} />
       ))}
     </div>
   );
 }
-
 export default TasksPage;

@@ -9,7 +9,7 @@ import {
 <context />;
 export const TasksContext = createContext();
 
-export const UseTask = () => {
+export const useTask = () => {
   const context = useContext(TasksContext);
   if (!context) {
     throw new Error("useAuth must be used within an AuthProvider");
@@ -28,15 +28,25 @@ export function TaskProvider({ children }) {
   const getTasks = async () => {
     try {
       const res = await getTasksRequest();
-      setTasks(res.data)
+      setTasks(res.data);
     } catch (error) {
       console.error(error);
     }
     //console.log(res)
   };
 
+  const deleteTask = async (id) => {
+    try {
+      const res = await deleteTaskRequest(id);
+      if (res.status === 200) setTasks(tasks.filter((task) => task._id !== id));
+      //console.log(res);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
-    <TasksContext.Provider value={{ tasks, createTask, getTasks }}>
+    <TasksContext.Provider value={{ tasks, createTask, getTasks, deleteTask }}>
       {children}
     </TasksContext.Provider>
   );
