@@ -8,7 +8,7 @@ function Navbar() {
   return (
     <nav className="bg-zinc-800 my-4 flex flex-col lg:flex-row lg:justify-between items-center py-4 px-8 rounded-xl shadow-lg">
       <div className="flex justify-between w-full lg:w-auto">
-        <Link to="/">
+        <Link to={isAuthenticated ? "/tasks" : "/"}>
           <h1 className="text-3xl font-extrabold text-white tracking-wide">
             Task Manager
           </h1>

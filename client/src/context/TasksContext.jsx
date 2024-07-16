@@ -17,13 +17,13 @@ export const useTask = () => {
   return context;
 };
 
-export function TaskProvider({ children }) {
-  const [tasks, setTasks] = useState([]);
+  export function TaskProvider({ children }) {
+    const [tasks, setTasks] = useState([]);
 
-  const createTask = async (task) => {
-    const res = await createTaskRequest(task);
-    console.log(res);
-  };
+    const createTask = async (task) => {
+      const res = await createTaskRequest(task);
+      console.log(res);
+    };
 
   const getTasks = async () => {
     try {
@@ -45,8 +45,28 @@ export function TaskProvider({ children }) {
     }
   };
 
+  const getTask = async (id) => {
+    try {
+      const res = await getTaskRequest(id);
+      // console.log(res);
+      //console.log(res.data)
+      return res.data;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  const updateTask = async (id, task) => {
+    try {
+      await updateTaskRequest(id, task);
+    } catch (error) {
+      return console.error(error);
+    }
+  };
+
   return (
-    <TasksContext.Provider value={{ tasks, createTask, getTasks, deleteTask }}>
+    <TasksContext.Provider
+      value={{ tasks, createTask, getTasks, deleteTask, getTask, updateTask }}
+    >
       {children}
     </TasksContext.Provider>
   );
